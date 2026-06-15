@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBudget</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <h2>SmartBudget</h2>
+        <p>Personal Finance Dashboard</p>
+
+        <nav>
+            <a href="#dashboard">🏠 Dashboard</a>
+            <a href="#income-section">💰 Income</a>
+            <a href="#expense-section">💳 Expenses</a>
+            <a href="#budget-section">📊 Budgets</a>
+            <a href="#goals-section">🎯 Goals</a>
+        </nav>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+
+        <header>
+            <div>
+                <h1>Financial Overview</h1>
+                <p>Monitor spending, savings, income, and financial goals.</p>
+            </div>
+
+            <button id="openFormBtn">Add Transaction</button>
+        </header>
+
+        <section class="cards">
+            <div class="card">
+                <p>Total Balance</p>
+                <h3 id="balance">$0.00</h3>
+                <span>Updated automatically</span>
+            </div>
+
+            <div class="card" id="income-section">
+                <p>Total Income</p>
+                <h3 id="income">$0.00</h3>
+                <span>Income tracked</span>
+            </div>
+
+            <div class="card" id="expense-section">
+                <p>Total Expenses</p>
+                <h3 id="expenses">$0.00</h3>
+                <span>Expenses tracked</span>
+            </div>
+
+            <div class="card">
+                <p>Savings Rate</p>
+                <h3 id="savings">0%</h3>
+                <span>Calculated automatically</span>
+            </div>
+        </section>
+
+        <section class="grid">
+            <div class="chart-box">
+                <h3>Spending Overview</h3>
+                <canvas id="spendingChart"></canvas>
+            </div>
+
+            <div class="budget-box" id="budget-section">
+                <h3>Budget Progress</h3>
+
+                <div class="budget-item">
+                    <p>Food <span>$0 / $500</span></p>
+                    <div class="bar"><div style="width:0%"></div></div>
+                </div>
+
+                <div class="budget-item">
+                    <p>Transportation <span>$0 / $300</span></p>
+                    <div class="bar"><div style="width:0%"></div></div>
+                </div>
+
+                <div class="budget-item">
+                    <p>Entertainment <span>$0 / $200</span></p>
+                    <div class="bar"><div style="width:0%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="transactions">
+            <h3>Recent Transactions</h3>
+
+            <table>
+                <thead>
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Action</th>
+    </tr>
+</thead>
+
+                <tbody id="transactionTable"></tbody>
+            </table>
+        </section>
+
+        <section class="transactions" id="goals-section">
+            <h3>Financial Goals</h3>
+
+            <div class="goal-card">
+                <h4>Emergency Fund</h4>
+                <p>$0 of $5,000 saved</p>
+                <div class="bar"><div style="width:0%"></div></div>
+            </div>
+
+            <br>
+
+            <div class="goal-card">
+                <h4>Vacation Fund</h4>
+                <p>$0 of $2,000 saved</p>
+                <div class="bar"><div style="width:0%"></div></div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="modal" id="transactionModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeFormBtn">&times;</span>
+
+        <h2>Add Transaction</h2>
+
+        <form id="transactionForm">
+            <input type="text" id="transactionName" placeholder="Transaction Name" required>
+
+            <select id="transactionCategory" required>
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Income">Income</option>
+            </select>
+
+            <select id="transactionType" required>
+                <option value="">Income or Expense?</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <input type="number" id="transactionAmount" placeholder="Amount" required>
+
+            <button type="submit">Save Transaction</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  background: #050606;
+  color: #ffffff;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #080f0c;
+  border-right: 1px solid #1d2b25;
+  padding: 30px;
+}
+
+.sidebar h2 {
+  color: #8aff80;
+  margin-bottom: 6px;
+}
+
+.sidebar p {
+  color: #8b9b91;
+  margin-bottom: 35px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar nav a {
+  color: #d7e6dc;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a:first-child {
+  background: #10291a;
+  color: #8aff80;
+}
+
+.main-content {
+  padding: 35px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 2.2rem;
+}
+
+header p {
+  color: #96a89d;
+  margin-top: 8px;
+}
+
+button {
+  background: #8aff80;
+  color: #061006;
+  border: none;
+  padding: 13px 20px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.card,
+.chart-box,
+.budget-box,
+.transactions {
+  background: linear-gradient(145deg, #0b1110, #0d1813);
+  border: 1px solid #1d3329;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 0 25px rgba(138, 255, 128, 0.06);
+}
+
+.card p {
+  color: #a3b7ad;
+  font-size: 0.9rem;
+}
+
+.card h3 {
+  font-size: 1.8rem;
+  margin: 12px 0;
+}
+
+.card span {
+  color: #8aff80;
+  font-size: 0.85rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.chart-box {
+  min-height: 310px;
+}
+
+.chart-box h3,
+.budget-box h3,
+.transactions h3 {
+  margin-bottom: 20px;
+}
+
+.budget-item {
+  margin-bottom: 22px;
+}
+
+.budget-item p {
+  display: flex;
+  justify-content: space-between;
+  color: #d8e7dd;
+  margin-bottom: 10px;
+}
+
+.budget-item span {
+  color: #8aff80;
+}
+
+.bar {
+  height: 10px;
+  background: #18251f;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.bar div {
+  height: 100%;
+  background: linear-gradient(90deg, #8aff80, #38d86a);
+  border-radius: 50px;
+}
+
+.transactions table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions th {
+  color: #8aff80;
+  text-align: left;
+  padding-bottom: 14px;
+}
+
+.transactions td {
+  padding: 14px 0;
+  border-top: 1px solid #1b2b24;
+  color: #dce9e0;
+}
+
+.income {
+  color: #8aff80 !important;
+  font-weight: bold;
+}
+
+.expense {
+  color: #ff6b6b !important;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .cards,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #1d2b25;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+/* Modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 450px;
+    background: #0d1813;
+    border: 1px solid #1d3329;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-content input,
+.modal-content select {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #253a31;
+    background: #111c17;
+    color: white;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.close-btn:hover {
+    color: #8aff80;
+}
+.delete-btn {
+    background: #ff5a5a;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.delete-btn:hover {
+    opacity: .8;
+}
