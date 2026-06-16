@@ -62,6 +62,27 @@
             </div>
         </section>
 
+        <section class="tools-grid">
+            <div class="tool-box">
+                <h3>Spending Allowance Calculator</h3>
+                <p>Calculate how much you can safely spend after bills and savings.</p>
+
+                <input type="number" id="allowanceIncome" placeholder="Monthly income">
+                <input type="number" id="allowanceBills" placeholder="Monthly bills">
+                <input type="number" id="allowanceSavings" placeholder="Savings goal">
+
+                <button onclick="calculateAllowance()">Calculate Allowance</button>
+
+                <h2 id="allowanceResult">$0.00</h2>
+                <span>Available spending money</span>
+            </div>
+
+            <div class="tool-box alert-box">
+                <h3>Smart Alerts</h3>
+                <p id="alertMessage">No alerts yet. Your budget is looking good.</p>
+            </div>
+        </section>
+
         <section class="grid">
             <div class="chart-box">
                 <h3>Spending Overview</h3>
@@ -72,18 +93,18 @@
                 <h3>Budget Progress</h3>
 
                 <div class="budget-item">
-                    <p>Food <span>$0 / $500</span></p>
-                    <div class="bar"><div style="width:0%"></div></div>
+                    <p>Food <span id="foodText">$0 / $500</span></p>
+                    <div class="bar"><div id="foodBar" style="width:0%"></div></div>
                 </div>
 
                 <div class="budget-item">
-                    <p>Transportation <span>$0 / $300</span></p>
-                    <div class="bar"><div style="width:0%"></div></div>
+                    <p>Transportation <span id="transportationText">$0 / $300</span></p>
+                    <div class="bar"><div id="transportationBar" style="width:0%"></div></div>
                 </div>
 
                 <div class="budget-item">
-                    <p>Entertainment <span>$0 / $200</span></p>
-                    <div class="bar"><div style="width:0%"></div></div>
+                    <p>Entertainment <span id="entertainmentText">$0 / $200</span></p>
+                    <div class="bar"><div id="entertainmentBar" style="width:0%"></div></div>
                 </div>
             </div>
         </section>
@@ -93,14 +114,14 @@
 
             <table>
                 <thead>
-    <tr>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Action</th>
-    </tr>
-</thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
                 <tbody id="transactionTable"></tbody>
             </table>
@@ -109,19 +130,14 @@
         <section class="transactions" id="goals-section">
             <h3>Financial Goals</h3>
 
-            <div class="goal-card">
-                <h4>Emergency Fund</h4>
-                <p>$0 of $5,000 saved</p>
-                <div class="bar"><div style="width:0%"></div></div>
+            <div class="goal-form">
+                <input type="text" id="goalName" placeholder="Goal name">
+                <input type="number" id="goalTarget" placeholder="Target amount">
+                <input type="number" id="goalSaved" placeholder="Amount saved">
+                <button onclick="addGoal()">Add Goal</button>
             </div>
 
-            <br>
-
-            <div class="goal-card">
-                <h4>Vacation Fund</h4>
-                <p>$0 of $2,000 saved</p>
-                <div class="bar"><div style="width:0%"></div></div>
-            </div>
+            <div id="goalsList"></div>
         </section>
 
     </main>
