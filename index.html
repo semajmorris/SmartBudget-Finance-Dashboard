@@ -14,78 +14,80 @@
 
     <aside class="sidebar">
         <h2>SmartBudget</h2>
-        <p>Personal Finance Dashboard</p>
+        <p>College Finance Dashboard</p>
 
         <nav>
             <a href="#dashboard">🏠 Dashboard</a>
-            <a href="#income-section">💰 Income</a>
-            <a href="#expense-section">💳 Expenses</a>
-            <a href="#budget-section">📊 Budgets</a>
+            <a href="#overview-section">📊 Overview</a>
+            <a href="#budget-section">💳 Budgets</a>
             <a href="#goals-section">🎯 Goals</a>
+            <a href="#transactions-section">🧾 Transactions</a>
         </nav>
     </aside>
 
     <main class="main-content" id="dashboard">
 
-        <header>
+        <header class="hero">
             <div>
-                <h1>Financial Overview</h1>
-                <p>Monitor spending, savings, income, and financial goals.</p>
+                <p class="tag">Smart money starts here</p>
+                <h1>Take Control of Your Money</h1>
+                <p>Track income, spending, budgets, and savings goals in one colorful dashboard.</p>
             </div>
 
-            <button id="openFormBtn">Add Transaction</button>
+            <button id="openFormBtn">+ Add Money Move</button>
         </header>
 
         <section class="cards">
-            <div class="card">
+            <div class="card balance-card">
                 <p>Total Balance</p>
                 <h3 id="balance">$0.00</h3>
-                <span>Updated automatically</span>
+                <span>Income minus spending</span>
             </div>
 
             <div class="card" id="income-section">
                 <p>Total Income</p>
                 <h3 id="income">$0.00</h3>
-                <span>Income tracked</span>
+                <span>Money coming in</span>
             </div>
 
             <div class="card" id="expense-section">
                 <p>Total Expenses</p>
                 <h3 id="expenses">$0.00</h3>
-                <span>Expenses tracked</span>
+                <span>Money going out</span>
             </div>
 
-            <div class="card">
-                <p>Savings Rate</p>
-                <h3 id="savings">0%</h3>
-                <span>Calculated automatically</span>
+            <div class="card safe-card">
+                <p>Safe to Spend</p>
+                <h3 id="safeToSpend">$0.00</h3>
+                <span>After expenses and goals</span>
             </div>
         </section>
 
-        <section class="tools-grid">
-            <div class="tool-box">
-                <h3>Spending Allowance Calculator</h3>
-                <p>Calculate how much you can safely spend after bills and savings.</p>
-
-                <input type="number" id="allowanceIncome" placeholder="Monthly income">
-                <input type="number" id="allowanceBills" placeholder="Monthly bills">
-                <input type="number" id="allowanceSavings" placeholder="Savings goal">
-
-                <button onclick="calculateAllowance()">Calculate Allowance</button>
-
-                <h2 id="allowanceResult">$0.00</h2>
-                <span>Available spending money</span>
+        <section class="overview-grid" id="overview-section">
+            <div class="chart-box large-chart">
+                <h3>Budget Flow</h3>
+                <p>See how your money moves between income, expenses, and goals.</p>
+                <canvas id="flowChart"></canvas>
             </div>
 
-            <div class="tool-box alert-box">
-                <h3>Smart Alerts</h3>
-                <p id="alertMessage">No alerts yet. Your budget is looking good.</p>
+            <div class="tool-box">
+                <h3>Spending Allowance</h3>
+                <p>Calculate what is safe to spend this month.</p>
+
+                <input type="number" id="allowanceIncome" placeholder="Monthly income">
+                <input type="number" id="allowanceBills" placeholder="Bills / fixed expenses">
+                <input type="number" id="allowanceSavings" placeholder="Savings goal">
+
+                <button onclick="calculateAllowance()">Calculate</button>
+
+                <h2 id="allowanceResult">$0.00</h2>
+                <span>Recommended spending allowance</span>
             </div>
         </section>
 
         <section class="grid">
             <div class="chart-box">
-                <h3>Spending Overview</h3>
+                <h3>Spending Breakdown</h3>
                 <canvas id="spendingChart"></canvas>
             </div>
 
@@ -94,29 +96,53 @@
 
                 <div class="budget-item">
                     <p>Food <span id="foodText">$0 / $500</span></p>
-                    <div class="bar"><div id="foodBar" style="width:0%"></div></div>
+                    <div class="bar"><div id="foodBar"></div></div>
                 </div>
 
                 <div class="budget-item">
                     <p>Transportation <span id="transportationText">$0 / $300</span></p>
-                    <div class="bar"><div id="transportationBar" style="width:0%"></div></div>
+                    <div class="bar"><div id="transportationBar"></div></div>
                 </div>
 
                 <div class="budget-item">
                     <p>Entertainment <span id="entertainmentText">$0 / $200</span></p>
-                    <div class="bar"><div id="entertainmentBar" style="width:0%"></div></div>
+                    <div class="bar"><div id="entertainmentBar"></div></div>
+                </div>
+
+                <div class="budget-item">
+                    <p>Shopping <span id="shoppingText">$0 / $250</span></p>
+                    <div class="bar"><div id="shoppingBar"></div></div>
                 </div>
             </div>
         </section>
 
-        <section class="transactions">
-            <h3>Recent Transactions</h3>
+        <section class="alert-box">
+            <h3>Smart Alerts</h3>
+            <p id="alertMessage">No alerts yet. Your budget is looking good.</p>
+        </section>
+
+        <section class="transactions" id="goals-section">
+            <h3>Goal Trackers</h3>
+
+            <div class="goal-form">
+                <input type="text" id="goalName" placeholder="Goal name">
+                <input type="number" id="goalTarget" placeholder="Target amount">
+                <input type="number" id="goalSaved" placeholder="Current saved">
+                <button onclick="addGoal()">Add Goal</button>
+            </div>
+
+            <div id="goalsList"></div>
+        </section>
+
+        <section class="transactions" id="transactions-section">
+            <h3>Recent Money Moves</h3>
 
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Category / Goal</th>
                         <th>Date</th>
                         <th>Amount</th>
                         <th>Action</th>
@@ -127,19 +153,6 @@
             </table>
         </section>
 
-        <section class="transactions" id="goals-section">
-            <h3>Financial Goals</h3>
-
-            <div class="goal-form">
-                <input type="text" id="goalName" placeholder="Goal name">
-                <input type="number" id="goalTarget" placeholder="Target amount">
-                <input type="number" id="goalSaved" placeholder="Amount saved">
-                <button onclick="addGoal()">Add Goal</button>
-            </div>
-
-            <div id="goalsList"></div>
-        </section>
-
     </main>
 </div>
 
@@ -147,30 +160,35 @@
     <div class="modal-content">
         <span class="close-btn" id="closeFormBtn">&times;</span>
 
-        <h2>Add Transaction</h2>
+        <h2>Add Money Move</h2>
 
         <form id="transactionForm">
-            <input type="text" id="transactionName" placeholder="Transaction Name" required>
+            <input type="text" id="transactionName" placeholder="Name, ex: Paycheck, Groceries, Emergency Fund" required>
+
+            <select id="transactionType" required>
+                <option value="">Choose type</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+                <option value="goal">Goal Savings</option>
+            </select>
 
             <select id="transactionCategory" required>
-                <option value="">Select Category</option>
+                <option value="">Choose category or goal</option>
+                <option value="Income">Income</option>
                 <option value="Food">Food</option>
                 <option value="Transportation">Transportation</option>
                 <option value="Shopping">Shopping</option>
                 <option value="Bills">Bills</option>
                 <option value="Entertainment">Entertainment</option>
-                <option value="Income">Income</option>
-            </select>
-
-            <select id="transactionType" required>
-                <option value="">Income or Expense?</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
+                <option value="Emergency Fund">Emergency Fund</option>
+                <option value="Tuition Fund">Tuition Fund</option>
+                <option value="Car Fund">Car Fund</option>
+                <option value="Vacation Fund">Vacation Fund</option>
             </select>
 
             <input type="number" id="transactionAmount" placeholder="Amount" required>
 
-            <button type="submit">Save Transaction</button>
+            <button type="submit">Save</button>
         </form>
     </div>
 </div>
