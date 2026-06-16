@@ -8,6 +8,8 @@ const balanceEl = document.getElementById("balance");
 const incomeEl = document.getElementById("income");
 const expensesEl = document.getElementById("expenses");
 const safeToSpendEl = document.getElementById("safeToSpend");
+const budgetScoreEl = document.getElementById("budgetScore");
+const budgetScoreText = document.getElementById("budgetScoreText");
 const alertMessage = document.getElementById("alertMessage");
 
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
@@ -65,9 +67,7 @@ function updateDashboard() {
     let categoryTotals = {};
 
     transactions.forEach((transaction, index) => {
-        if (transaction.type === "income") {
-            income += transaction.amount;
-        }
+        if (transaction.type === "income") income += transaction.amount;
 
         if (transaction.type === "expense") {
             expenses += transaction.amount;
@@ -75,9 +75,7 @@ function updateDashboard() {
                 (categoryTotals[transaction.category] || 0) + transaction.amount;
         }
 
-        if (transaction.type === "goal") {
-            goalSavings += transaction.amount;
-        }
+        if (transaction.type === "goal") goalSavings += transaction.amount;
 
         const row = document.createElement("tr");
 
@@ -90,9 +88,7 @@ function updateDashboard() {
                 ${transaction.type === "income" ? "+" : "-"}$${transaction.amount.toFixed(2)}
             </td>
             <td>
-                <button class="delete-btn" onclick="deleteTransaction(${index})">
-                    Delete
-                </button>
+                <button class="delete-btn" onclick="deleteTransaction(${index})">Delete</button>
             </td>
         `;
 
@@ -107,6 +103,7 @@ function updateDashboard() {
     expensesEl.textContent = `$${expenses.toFixed(2)}`;
     safeToSpendEl.textContent = `$${safeToSpend.toFixed(2)}`;
 
+    updateBudgetScore(income, expenses, goalSavings, safeToSpend);
     updateBudgetProgress(categoryTotals);
     updateCharts(categoryTotals, income, expenses, goalSavings);
     updateAlerts(income, expenses, goalSavings, categoryTotals);
@@ -117,7 +114,32 @@ function formatType(type) {
     if (type === "income") return "Income";
     if (type === "expense") return "Expense";
     if (type === "goal") return "Goal Savings";
-    return type;
+}
+
+function updateBudgetScore(income, expenses, goalSavings, safeToSpend) {
+    let score = 100;
+
+    if (income === 0) {
+        score = 100;
+    } else {
+        const expenseRatio = expenses / income;
+
+        if (expenseRatio > 1) score -= 40;
+        else if (expenseRatio > 0.8) score -= 25;
+        else if (expenseRatio > 0.6) score -= 15;
+
+        if (goalSavings < income * 0.05) score -= 10;
+        if (safeToSpend < income * 0.1) score -= 20;
+    }
+
+    score = Math.max(score, 0);
+
+    budgetScoreEl.textContent = `${score}/100`;
+
+    if (score >= 85) budgetScoreText.textContent = "Excellent money flow";
+    else if (score >= 70) budgetScoreText.textContent = "Healthy budget";
+    else if (score >= 50) budgetScoreText.textContent = "Needs attention";
+    else budgetScoreText.textContent = "High risk of overspending";
 }
 
 function updateBudgetProgress(categoryTotals) {
@@ -136,13 +158,9 @@ function updateSingleBudget(category, spent, limit) {
     const bar = document.getElementById(`${category}Bar`);
     bar.style.width = `${percent}%`;
 
-    if (percent >= 90) {
-        bar.style.background = "#ff5c7a";
-    } else if (percent >= 70) {
-        bar.style.background = "#ffd166";
-    } else {
-        bar.style.background = "linear-gradient(90deg, #8aff80, #4dd4ff)";
-    }
+    if (percent >= 90) bar.style.background = "#ff5c7a";
+    else if (percent >= 70) bar.style.background = "#ffd166";
+    else bar.style.background = "linear-gradient(90deg, #8aff80, #4dd4ff)";
 }
 
 function updateCharts(categoryTotals, income, expenses, goalSavings) {
@@ -152,7 +170,6 @@ function updateCharts(categoryTotals, income, expenses, goalSavings) {
 
 function updateSpendingChart(categoryTotals) {
     const ctx = document.getElementById("spendingChart");
-
     const labels = Object.keys(categoryTotals);
     const data = Object.values(categoryTotals);
 
@@ -164,13 +181,7 @@ function updateSpendingChart(categoryTotals) {
             labels: labels.length ? labels : ["No expenses yet"],
             datasets: [{
                 data: data.length ? data : [1],
-                backgroundColor: [
-                    "#8aff80",
-                    "#4dd4ff",
-                    "#ff5c7a",
-                    "#ffd166",
-                    "#b388ff"
-                ],
+                backgroundColor: ["#8aff80", "#4dd4ff", "#ff5c7a", "#ffd166", "#b388ff"],
                 borderWidth: 0
             }]
         },
@@ -187,7 +198,6 @@ function updateSpendingChart(categoryTotals) {
 
 function updateFlowChart(income, expenses, goalSavings) {
     const ctx = document.getElementById("flowChart");
-
     const safeToSpend = Math.max(income - expenses - goalSavings, 0);
 
     if (flowChart) flowChart.destroy();
@@ -199,12 +209,7 @@ function updateFlowChart(income, expenses, goalSavings) {
             datasets: [{
                 label: "Budget Flow",
                 data: [income, expenses, goalSavings, safeToSpend],
-                backgroundColor: [
-                    "#8aff80",
-                    "#ff5c7a",
-                    "#4dd4ff",
-                    "#ffd166"
-                ],
+                backgroundColor: ["#8aff80", "#ff5c7a", "#4dd4ff", "#ffd166"],
                 borderRadius: 12
             }]
         },
@@ -237,12 +242,10 @@ function updateAlerts(income, expenses, goalSavings, categoryTotals) {
         return;
     }
 
-    if (expenses > income) {
-        alerts.push("Your expenses are higher than your income.");
-    }
+    if (expenses > income) alerts.push("Your expenses are higher than your income.");
 
     if (goalSavings > income * 0.5 && income > 0) {
-        alerts.push("You are putting a large amount toward goals. Make sure you still have enough cash for essentials.");
+        alerts.push("You are saving a lot toward goals. Make sure you still have enough for essentials.");
     }
 
     Object.keys(budgets).forEach((category) => {
@@ -250,11 +253,8 @@ function updateAlerts(income, expenses, goalSavings, categoryTotals) {
         const limit = budgets[category];
         const percent = (spent / limit) * 100;
 
-        if (percent >= 100) {
-            alerts.push(`${category} budget reached the limit.`);
-        } else if (percent >= 80) {
-            alerts.push(`${category} budget is close to the limit.`);
-        }
+        if (percent >= 100) alerts.push(`${category} budget reached the limit.`);
+        else if (percent >= 80) alerts.push(`${category} budget is close to the limit.`);
     });
 
     alertMessage.textContent = alerts.length
@@ -290,7 +290,7 @@ function addGoal() {
     document.getElementById("goalTarget").value = "";
     document.getElementById("goalSaved").value = "";
 
-    renderGoals();
+    updateDashboard();
 }
 
 function updateGoalSavings(goalName, amount) {
@@ -328,19 +328,10 @@ function renderGoals() {
 
             <br>
 
-            <input 
-                type="number" 
-                id="goalUpdate${index}" 
-                placeholder="Add more to this goal"
-            >
+            <input type="number" id="goalUpdate${index}" placeholder="Add more to this goal">
 
-            <button onclick="addToGoal(${index})">
-                Update Goal
-            </button>
-
-            <button class="delete-btn" onclick="deleteGoal(${index})">
-                Delete Goal
-            </button>
+            <button onclick="addToGoal(${index})">Update Goal</button>
+            <button class="delete-btn" onclick="deleteGoal(${index})">Delete Goal</button>
         `;
 
         goalsList.appendChild(goalCard);
@@ -373,7 +364,7 @@ function addToGoal(index) {
 function deleteGoal(index) {
     goals.splice(index, 1);
     saveData();
-    renderGoals();
+    updateDashboard();
 }
 
 function deleteTransaction(index) {
